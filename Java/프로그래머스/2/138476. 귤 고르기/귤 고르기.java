@@ -1,23 +1,29 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 class Solution {
     public int solution(int k, int[] tangerine) {
         int answer = 0;
-        HashMap<Integer,Integer> map =new HashMap<>();
+        Arrays.sort(tangerine);
+        Integer[] count = new Integer[tangerine.length];
+        Arrays.fill(count, 0);
+        int num = 0;
+        int sum = 0;
+        int temp = -1;
 
-        for (int t : tangerine) {
-            map.put(t, map.getOrDefault(t, 0) + 1);
+        for (int i = 0; i < tangerine.length; i++) {
+            if (i == tangerine.length - 1 || tangerine[i] != tangerine[i + 1]) {
+                count[num++] = i - temp;
+                temp = i;
+            }
         }
 
-        List<Integer> list = new ArrayList<>(map.keySet());
-        list.sort((o1, o2) -> map.get(o2)-map.get(o1));
+        Arrays.sort(count, Collections.reverseOrder());
 
-        for(Integer key:list){
-            k -=map.get(key);
+        for (int i = 0; sum < k; i++) {
+            sum += count[i];
             answer++;
-            if(k<=0){
-                break;
-            }
         }
 
         return answer;
